@@ -17,6 +17,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "store/wordle.js", "store/store.js", "src/pages/wordle/index.tsx"],
   "exclude": ["node_modules"]
 }
