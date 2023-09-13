@@ -25,10 +25,7 @@ export const getExactGuesses = createSelector(
 );
 
 export const getInexactGuesses = createSelector(
-  (state) => [
-    state.wordle.word,
-    getAllGuesses(state),
-  ],
+  (state) => [state.wordle.word, getAllGuesses(state)],
   ([word, allGuesses]) => {
     return word.split("").filter((letter, i) => allGuesses.includes(letter));
   }

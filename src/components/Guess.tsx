@@ -5,7 +5,6 @@ interface GuessProps {
 }
 
 export const Guess = ({ isGuessed, word, guess }: GuessProps) => {
-  
   return (
     <div className="mb-2 grid grid-cols-5 gap-2">
       {new Array(5).fill(0).map((_, i) => {
