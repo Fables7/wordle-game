@@ -1,5 +1,38 @@
 import words from "../words.json";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createSelector } from "@reduxjs/toolkit";
+
+export const getAllGuesses = createSelector(
+  (state) => [state.wordle.guesses, state.wordle.currentGuess],
+  ([guesses, currentGuess]) => {
+    return guesses.slice(0, currentGuess).join("").split("");
+  }
+);
+
+export const getExactGuesses = createSelector(
+  (state) => [
+    state.wordle.word,
+    state.wordle.guesses,
+    state.wordle.currentGuess,
+  ],
+  ([word, guesses, currentGuess]) => {
+    return word.split("").filter((letter, i) => {
+      return guesses
+        .slice(0, currentGuess)
+        .map((word) => word[i])
+        .includes(letter);
+    });
+  }
+);
+
+export const getInexactGuesses = createSelector(
+  (state) => [
+    state.wordle.word,
+    getAllGuesses(state),
+  ],
+  ([word, allGuesses]) => {
+    return word.split("").filter((letter, i) => allGuesses.includes(letter));
+  }
+);
 
 export const wordleSlice = createSlice({
   name: "wordle",
@@ -9,6 +42,8 @@ export const wordleSlice = createSlice({
     currentGuess: 0,
     didWin: false,
     didLose: false,
+    exactGuesses: [],
+    inexactGuesses: [],
   },
 
   reducers: {
@@ -17,7 +52,8 @@ export const wordleSlice = createSlice({
       state.word = words[Math.round(Math.random() * words.length)];
       state.guesses = ["", "", "", "", "", ""];
       state.currentGuess = 0;
-      console.log(state.word);
+      state.didWin = false;
+      state.didLose = false;
     },
 
     submitGuess: (state) => {
@@ -28,10 +64,11 @@ export const wordleSlice = createSlice({
         console.log("you lose");
         state.didLose = true;
       }
-      state.currentGuess++;
+      if (words.includes(state.guesses[state.currentGuess])) {
+        state.currentGuess++;
+      }
     },
     handleKeyup: (state, action) => {
-      console.log(state.currentGuess, "current guess");
       if (
         state.currentGuess === 6 ||
         state.guesses[state.currentGuess - 1] === state.word
@@ -57,10 +94,6 @@ export const wordleSlice = createSlice({
         state.guesses[state.currentGuess] =
           state.guesses[state.currentGuess] + action.payload.toLowerCase();
       }
-    },
-
-    checkWin: (state) => {
-      return state.guesses[state.currentGuess] === state.word;
     },
   },
 });

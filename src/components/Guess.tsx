@@ -5,6 +5,7 @@ interface GuessProps {
 }
 
 export const Guess = ({ isGuessed, word, guess }: GuessProps) => {
+  
   return (
     <div className="mb-2 grid grid-cols-5 gap-2">
       {new Array(5).fill(0).map((_, i) => {
@@ -14,7 +15,7 @@ export const Guess = ({ isGuessed, word, guess }: GuessProps) => {
           ? "bg-green-400"
           : word.includes(guess[i])
           ? "bg-yellow-400"
-          : "bg-black";
+          : "bg-gray-600";
 
         return (
           <div

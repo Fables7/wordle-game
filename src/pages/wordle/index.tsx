@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import words from "../../../words.json";
 import { Guess } from "@/components/Guess";
 import { Qwerty } from "@/components/Qwerty";
 
@@ -16,7 +15,7 @@ const Wordle = () => {
   const didLose = useSelector((state: any) => state.wordle.didLose);
 
   useEffect(() => {
-    dispatch(initialise(null));
+    dispatch(initialise());
     const handleKeyupFn = (e: any) => {
       dispatch(handleKeyup(e.key));
     };
@@ -43,6 +42,9 @@ const Wordle = () => {
       ))}
       {didWin && <h2>You won!</h2>}
       {didLose && <h2>You lost!</h2>}
+      {(didWin || didLose) && (
+        <button onClick={() => dispatch(initialise())}>Play Again</button>
+      )}
       <Qwerty />
 
       <h2>{JSON.stringify(guesses)}</h2>
